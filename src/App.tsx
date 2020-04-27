@@ -4,6 +4,7 @@ import './App.css';
 import { UserProvider } from './context/user'
 import { Home } from './features/home';
 import { Login } from './features/login';
+import { PrivateRoute } from './components/PrivateRoute';
 
 function App() {
 
@@ -21,7 +22,7 @@ function App() {
           </ul>
         </nav>
         <UserProvider>
-          <Route path="/" exact component={Home} />
+          <PrivateRoute path="/" exact component={Home} />
           <Route path="/login" exact component={Login} />
         </UserProvider>
       </div>

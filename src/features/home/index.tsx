@@ -1,34 +1,48 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { getUser } from '../../utils/auth'
-import { useHistory } from 'react-router-dom'
 import io from 'socket.io-client'
-
-const socket = io('http://localhost:3000')
+import { User } from '../../User'
+import { Message } from '../../Message'
 
 export const Home: React.FC = () => {
   const [message, setMessage] = useState('')
+  const [socket, setSocket] = useState<SocketIOClient.Socket | undefined>(undefined)
+  const [messages, setMessages] = useState<Message[]>([])
+  const user = getUser() as User
 
-  const history = useHistory()
-  const user = getUser()
+  useEffect(() => {
+    if(!socket)
+    setSocket(io('http://localhost:3500'))
+  }, [])
 
-  if(!user) {
-    history.push("/login")
-    return (<></>)
+  if(socket) {
+    socket.on('askForToken', () => {
+      socket.emit('sendToken', user.token)
+    })
+  
+    socket.on('newMessage', (message: Message) => {
+      setMessages([...messages, message])
+    })
   }
-
-  socket.on('askForToken', () => {
-    socket.emit('sendToken', user.token)
-  })
 
   const onChange = (event: any) => {
     setMessage(event.target.value)
   }
 
   const onPress = () => {
-    socket.emit('newMessage', {
-      to: 'test@gmail.com',
-      content: message
-    })
+    if(socket) {
+      socket.emit('newMessage', {
+        to: 'a@gmail.com',
+        content: message
+      })
+
+      setMessages([...messages, {
+        to: 'a@gmail.com',
+        content: message,
+        from: 'a@gmail.com',
+        date: Date.now().toString()
+      }])
+    }
   }
 
   return (
@@ -41,6 +55,10 @@ export const Home: React.FC = () => {
         onChange={onChange}
       />
       <button onClick={onPress}>send</button>
+
+      { messages.map((msg, i) => {
+        return <div key={i} style={{color: msg.to === user.email? 'red': 'blue'}}>{msg.content}</div>
+      })}
     </div>
   )
 }
