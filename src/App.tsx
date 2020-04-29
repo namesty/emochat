@@ -1,12 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import './App.css';
-import { UserProvider } from './context/user'
-import { Home } from './features/home';
-import { Login } from './features/login';
-import { PrivateRoute } from './components/PrivateRoute';
+import { Home } from './pages/home';
+import { Login } from './pages/login';
+import { PrivateRoute } from './core/components/PrivateRoute';
+import { AuthService } from './features/auth/domain/auth-service';
 
 function App() {
+
+  //TODO: maybe make this static since it is not being injected
+  const authServ = new AuthService()
 
   return (
     <Router>
@@ -21,10 +24,8 @@ function App() {
             </li>
           </ul>
         </nav>
-        <UserProvider>
-          <PrivateRoute path="/" exact component={Home} />
-          <Route path="/login" exact component={Login} />
-        </UserProvider>
+        <PrivateRoute path="/" exact component={Home} authSerivce={authServ}/>
+        <Route path="/login" exact component={Login} />
       </div>
     </Router>
   );

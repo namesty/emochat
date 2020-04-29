@@ -1,19 +1,14 @@
 import React, { useState, useContext } from 'react'
-import { login } from '../../utils/auth'
-import { UserContext } from '../../context/user'
+import { AuthRepositoryFactory } from '../../features/auth/infrastructure/auth-repository-factory'
 
 export const Login: React.FC = () => {
-
+  const authRepository = AuthRepositoryFactory.build()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useContext(UserContext)
-
-  console.log(user)
 
   const onSubmit = async (event: any) => {
     event.preventDefault()
-    const result = await login(email, password)
-    setUser(result)
+    await authRepository.login(email, password)
   }
 
   const onChangeEmail = (event: any) => {

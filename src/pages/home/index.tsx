@@ -1,28 +1,39 @@
 import React, { useState, useEffect } from 'react'
-import { getUser } from '../../utils/auth'
 import io from 'socket.io-client'
-import { User } from '../../User'
 import { Message } from '../../Message'
-import { MessageBox } from '../../components/message/message'
+import { MessageBox } from '../../core/components/message/message'
 import styles from './home.module.css'
-import { ContactBox } from '../../components/contact'
+import { ContactBox } from '../../core/components/contact'
+import { useHistory } from 'react-router-dom'
+import { AuthService } from '../../features/auth/domain/auth-service'
+import { User } from '../../features/user/domain/user'
 
 export const Home: React.FC = () => {
+  //TODO: maybe making a factory for this?
+  const authService = new AuthService()
+
+  const history = useHistory()
   const [message, setMessage] = useState('')
   const [users, setUsers] = useState<User[]>([])
   const [chattingUser, setChattingUser] = useState<User>()
   const [socket, setSocket] = useState<SocketIOClient.Socket | undefined>(undefined)
   const [messages, setMessages] = useState<Message[]>([])
-  const user = getUser() as User
+  const authData = authService.getFromStorage()
 
   useEffect(() => {
     if(!socket)
     setSocket(io('http://localhost:3500'))
   }, [])
 
+  //TODO: Fix this with proper route protection
+  if(!authData) {
+    history.push('/login')
+    return (<></>)
+  }
+
   if(socket) {
     socket.on('askForToken', () => {
-      socket.emit('sendToken', user.token)
+      socket.emit('sendToken', authData.token)
     })
   
     socket.on('newMessage', (message: Message) => {
@@ -49,11 +60,13 @@ export const Home: React.FC = () => {
       setMessages([...messages, {
         to: chattingUser.email,
         content: message,
-        from: user.email,
+        from: authData.user.email,
         date: Date.now().toString()
       }])
     }
   }
+
+  console.log(chattingUser)
 
   const onPressContact = (chattingUser: User) => setChattingUser(chattingUser)
 
@@ -89,7 +102,7 @@ export const Home: React.FC = () => {
                 key={i}
                 time={msg.date.toString()}
                 content={msg.content}
-                mine={msg.from.toString() === user.email}
+                mine={msg.from.toString() === authData.user.email}
               />
             )
           })}

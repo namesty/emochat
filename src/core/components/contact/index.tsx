@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './contact.module.css'
-import { User } from '../../User'
+import { User } from '../../../features/user/domain/user'
 
 interface Props {
   user: User
