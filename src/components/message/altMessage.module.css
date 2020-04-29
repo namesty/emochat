@@ -1,10 +1,11 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: #7EAAD1;
+  background-color: #F0F4F7;
   padding: 5px 15px 5px 15px;
   max-width: 300px;
   border-radius: 15px;
+  border: 2px solid #EEEEEE;
 }
 
 .body {
@@ -13,7 +14,6 @@
 
 .contentText {
   font-size: 15px;
-  color: white;
 }
 
 .footer {
@@ -24,6 +24,6 @@
 
 .timeText {
   font-size: 13px;
-  color: white;
+  color: #3D7E9A;
   font-weight: bold;
 }

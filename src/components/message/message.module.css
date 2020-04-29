@@ -1,19 +1,11 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: #F0F4F7;
+  background-color: white;
   padding: 5px 15px 5px 15px;
   max-width: 300px;
   border-radius: 15px;
-}
-
-.altContainer {
-  display: flex;
-  flex-direction: column;
-  background-color: #7EAAD1;
-  padding: 5px 15px 5px 15px;
-  max-width: 300px;
-  border-radius: 15px;
+  border: 2px solid #EEEEEE;
 }
 
 .body {
@@ -32,6 +24,6 @@
 
 .timeText {
   font-size: 13px;
-  color: #9D9D9D;
+  color: #3D7E9A;
   font-weight: bold;
 }
