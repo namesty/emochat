@@ -12,7 +12,13 @@ export class UserHttpRepository implements UserRepository {
   ) {}
 
   async findAll(): Promise<User[]> {
-    const response = await http.get<UserDTO[]>('/user')
+    
+    const token = localStorage.getItem('token')
+
+    const response = await http.get<UserDTO[]>('/user', { headers: {
+      Authorization: `Bearer ${token}`
+    }})
+    
     return response.data.map(userDto => this.userDTOToUserMapper.map(userDto))
   }
 }

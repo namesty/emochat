@@ -4,13 +4,12 @@ import { User } from '../../../features/user/domain/user'
 
 interface Props {
   user: User
-  userSetter: (contact: User) => void
 }
 
-export const ContactBox: React.FC<Props> = ({user, userSetter}) => {
+export const ContactBox: React.FC<Props> = ({user}) => {
 
   return (
-    <button className={styles.container} onClick={() => userSetter(user)}>
+    <button className={styles.container}>
       <div className={styles.textContainer}>
         <div className={styles.nameTextContainer}>
           <p className={styles.nameText}>{`${user.name} ${user.lastName}`}</p>

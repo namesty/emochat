@@ -84,7 +84,6 @@ export const Home: React.FC = () => {
                 <ContactBox
                   key={i}
                   user={usr}
-                  userSetter={onPressContact}
                 />
               )
             })

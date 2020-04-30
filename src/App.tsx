@@ -5,6 +5,7 @@ import { Home } from './pages/home';
 import { Login } from './pages/login';
 import { PrivateRoute } from './core/components/PrivateRoute';
 import { AuthService } from './features/auth/domain/auth-service';
+import { Contacts } from './pages/contacts';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         </nav>
         <PrivateRoute path="/" exact component={Home} authSerivce={authServ}/>
         <Route path="/login" exact component={Login} />
+        <Route path="/contacts" exact component={Contacts} />
       </div>
     </Router>
   );
