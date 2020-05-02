@@ -1,16 +1,16 @@
 import React from 'react'
-import defaultStyles from './message.module.css'
-import altStyles from './altMessage.module.css'
+import defaultStyles from './textBubble.module.css'
+import altStyles from './altTextBubble.module.css'
 
 interface Props {
   time: string,
   content: string,
-  mine: boolean
+  defaultStyle: boolean
 }
 
-export const MessageBox: React.FC<Props> = ({time, content, mine}) => {
+export const TextBubble: React.FC<Props> = ({time, content, defaultStyle}) => {
 
-  const styles = mine? defaultStyles: altStyles
+  const styles = defaultStyle? defaultStyles: altStyles
 
   return (
     <div className={styles.container}>

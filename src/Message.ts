@@ -1,6 +1,7 @@
+import { User } from "./features/user/domain/user";
+
 export interface Message {
-  from: string
-  to: string
+  from: User
   content: string
   date: string
 }

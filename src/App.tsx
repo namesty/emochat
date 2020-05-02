@@ -1,11 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
-import { Home } from './pages/home';
-import { Login } from './pages/login';
 import { PrivateRoute } from './core/components/PrivateRoute';
 import { AuthService } from './features/auth/domain/auth-service';
-import { Contacts } from './pages/contacts';
+import { UserList } from './features/user/ui/userList';
+import { ConversationScreen } from './features/conversation/ui/conversationScreen';
+import { Login } from './features/auth/ui/login';
 
 function App() {
 
@@ -14,21 +14,11 @@ function App() {
 
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login/">Login</Link>
-            </li>
-          </ul>
-        </nav>
-        <PrivateRoute path="/" exact component={Home} authSerivce={authServ}/>
-        <Route path="/login" exact component={Login} />
-        <Route path="/contacts" exact component={Contacts} />
-      </div>
+      <Route path="/home" exact>
+        <ConversationScreen authService={authServ}/>
+      </Route>
+      <Route path="/login" exact component={Login} />
+      <Route path="/users" exact component={UserList} />
     </Router>
   );
 }
