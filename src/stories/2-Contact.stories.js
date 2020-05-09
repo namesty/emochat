@@ -1,23 +1,20 @@
 import React from 'react';
-import { ContactBox } from '../components/contact';
+import { ListItem } from '../core/components/listItem';
 
 export default {
-  title: 'Contact',
-  component: ContactBox,
+  title: 'List Item',
+  component: ListItem,
 };
 
-const longMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut"
-const shortMessage = "This is a short message"
-
-export const Single = () => <ContactBox name="Nestor" lastName="Amesty" email="test@gmail.com"/>
+export const Single = () => <ListItem bigText="Nestor" smallText="test@gmail.com"/>
 
 export const List = () => {
   return (
     <div>
-      <ContactBox name="Nestor" lastName="Amesty" email="test@gmail.com"/>
-      <ContactBox name="Ana" lastName="Caldera" email="test@gmail.com"/>
-      <ContactBox name="Cesar" lastName="Brazon" email="test@gmail.com"/>
-      <ContactBox name="Fabiola" lastName="Lombardi" email="test@gmail.com"/>
+      <ListItem bigText="Nestor" smallText="test@gmail.com"/>
+      <ListItem bigText="Ana" smallText="test@gmail.com"/>
+      <ListItem bigText="Cesar" smallText="test@gmail.com"/>
+      <ListItem bigText="Fabiola" smallText="test@gmail.com"/>
     </div>
   )
 }

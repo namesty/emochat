@@ -1,0 +1,9 @@
+.container {
+  background: #5A52A5;
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.25rem;
+  padding-left: 2rem;
+}

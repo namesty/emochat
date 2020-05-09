@@ -1,0 +1,33 @@
+.mainContainer {
+  display: flex;
+  height: 100%;
+}
+
+.conversationsContainer {
+  flex-grow: 1;
+  z-index: 10;
+  flex-direction: column;
+  background-color: #FAFBFD;
+-webkit-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
+-moz-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
+box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
+}
+
+.chatScreen {
+  display: flex;
+  flex-grow: 3;
+  justify-content: space-between;
+  flex-direction: column;
+  max-height: max-content;
+}
+
+.header {
+  background: #5A52A5;
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.25rem;
+  padding-left: 2rem;
+  border-right: solid 2px gainsboro;
+}

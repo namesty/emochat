@@ -1,11 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
-import { PrivateRoute } from './core/components/PrivateRoute';
 import { AuthService } from './features/auth/domain/auth-service';
 import { UserList } from './features/user/ui/userList';
-import { ConversationScreen } from './features/conversation/ui/conversationScreen';
 import { Login } from './features/auth/ui/login';
+import { ConversationScreen } from './features/conversation/ui/messages/conversationScreen';
 
 function App() {
 
@@ -15,6 +14,9 @@ function App() {
   return (
     <Router>
       <Route path="/home" exact>
+        <ConversationScreen authService={authServ}/>
+      </Route>
+      <Route path="/" exact>
         <ConversationScreen authService={authServ}/>
       </Route>
       <Route path="/login" exact component={Login} />

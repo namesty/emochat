@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import styles from "./conversationScreen.module.css";
-import { ConversationList } from "./conversationList";
-import { Conversation } from "../domain/conversation";
-import { ConversationRepositoryFactory } from "../infrastructure/conversation-repository-factory";
-import { AuthService } from "../../auth/domain/auth-service";
-import { MessageList } from "../../message/ui/messageList";
-import { Message } from "../../../Message";
+import { ConversationList } from "../conversations/conversationList";
+import { Conversation } from "../../domain/conversation";
+import { ConversationRepositoryFactory } from "../../infrastructure/conversation-repository-factory";
+import { AuthService } from "../../../auth/domain/auth-service";
+import { MessageList } from "../../../message/ui/messageList";
+import { Message } from "../../../../Message";
 import { useHistory } from "react-router-dom";
-import { Auth } from "../../auth/domain/auth";
+import { User } from "../../../user/domain/user";
+import { Input } from "../../../../core/components/input/input";
+import { Header } from "../header/conversationHeader";
 
 interface NewMessage {
   conversationId: string;
@@ -33,6 +35,8 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   useEffect(() => {
     conversationsRef.current = conversations
   });
+
+  //extraer sockets etc en otra clase. Colocarlo en el dominio de application
 
   useEffect(() => {
     if (authData) {
@@ -87,6 +91,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   async function fetchConversations() {
     const conversations = await conversationRepository.findMyConversations();
     setConversations(conversations);
+    setCurrentConvo(conversations[0])
   }
 
   const selectConversation = (convo: Conversation) => {
@@ -110,9 +115,20 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
     }
   };
 
+  const filterUsers = (users: User[]): string => {
+    const result = users.filter( u => u.id !== authData.user.id).map(u => `${u.name} ${u.lastName}`)
+    return result.reduce((prev, current, i) => {
+      const name = prev + current
+      return result[i + 1]? name + ', ': name
+    }, '')
+  }
+
   return (
-    <div className="main-container">
-      <div className="conversations-container">
+    <div className={styles.mainContainer}>
+      <div className={styles.conversationsContainer}>
+        <div className={styles.header}>
+          <p>CONVERSATIONS</p>
+        </div>
         {
           <ConversationList
             authData={authData}
@@ -121,17 +137,18 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
           />
         }
       </div>
-      <div className="chat-screen">
-        <div className="chat-body">
-          {currentConvo && (
+      {
+        currentConvo && 
+        <div className={styles.chatScreen}>
+          <Header fullName={filterUsers(currentConvo.users)}/>
+          <div className={styles.chatBody}>
             <MessageList conversation={currentConvo} authData={authData} />
-          )}
+          </div>
+          <div className={styles.chatInputContainer}>
+            <Input onChange={onChangeInput} value={messageText} onClickButton={sendMessage} />
+          </div>
         </div>
-        <div className="chat-input">
-          <input onChange={onChangeInput} value={messageText} />
-          <button onClick={sendMessage}>Send</button>
-        </div>
-      </div>
+      }
     </div>
   );
 };

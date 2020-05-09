@@ -1,6 +1,6 @@
 import React from 'react'
-import { Conversation } from '../domain/conversation'
-import { ListItem } from '../../../core/components/listItem'
+import { Conversation } from '../../domain/conversation';
+import { ListItem } from '../../../../core/components/listItem';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   conversation: Conversation
@@ -12,6 +12,7 @@ export const ConversationItem: React.FC<Props> = ({ conversation: convo, meId, .
   const notMeUsers = convo.users.filter(u => u.id !== meId)
   const lastMessage = convo.messages.length > 0 && convo.messages.slice(-1)[0];
 
+  //TODO: hacer la abreviatura con CSS ellipsis
   return (
     <ListItem 
       key={convo.id}

@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { Conversation } from '../domain/conversation'
-import { ConversationRepositoryFactory } from '../infrastructure/conversation-repository-factory'
+import React from 'react'
+import { Conversation } from '../../domain/conversation'
+import { Auth } from '../../../auth/domain/auth'
 import { ConversationItem } from './conversationItem'
-import { AuthService } from '../../auth/domain/auth-service'
-import { Auth } from '../../auth/domain/auth'
 
 interface Props {
   authData: Auth

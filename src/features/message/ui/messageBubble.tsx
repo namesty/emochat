@@ -12,7 +12,7 @@ export const MessageBubble: React.FC<Props> = ({ message, mine }) => {
 
   return (
     <TextBubble
-      defaultStyle={mine}
+      mine={mine}
       time={message.date}
       content={message.content}
     />

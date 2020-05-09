@@ -9,16 +9,18 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const ListItem: React.FC<Props> = ({bigText, smallText, ...rest}) => {
 
   return (
-    <button className={styles.container} {...rest}>
-      <div className={styles.textContainer}>
-        <div className={styles.nameTextContainer}>
-          <p className={styles.nameText}>{bigText}</p>
+    <div className={styles.container}>
+      <button className={styles.body} {...rest}>
+        <div className={styles.textContainer}>
+          <div className={styles.nameTextContainer}>
+            <p className={styles.nameText}>{bigText}</p>
+          </div>
+          <div className={styles.footerTextContainer}>
+            <p className={styles.footerText}>{smallText}</p>
+          </div>
         </div>
-        <div className={styles.footerTextContainer}>
-          <p className={styles.footerText}>{smallText}</p>
-        </div>
-      </div>
-    </button>
+      </button>
+    </div>
   )
 
 }

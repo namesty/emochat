@@ -3,6 +3,7 @@ import { http, createAuthHeader } from "../../../core/http/axios";
 import { Conversation } from "../domain/conversation";
 import { Message } from "../../../Message";
 
+//TODO: inyectar http por constructor
 export class ConversationHttpRepository implements ConversationRepository {
   async findMyConversations(): Promise<Conversation[]> {
     const response = await http.get("/conversation", {

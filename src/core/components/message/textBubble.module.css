@@ -1,29 +1,40 @@
 .container {
   display: flex;
-  flex-direction: column;
-  background-color: white;
-  padding: 5px 15px 5px 15px;
-  max-width: 300px;
-  border-radius: 15px;
-  border: 2px solid #EEEEEE;
+  flex-direction: row;
+  padding: 1.15em;
+  align-items: center;
 }
 
 .body {
-  display: flex;
+  background-color: #ffffff;
+  padding: 0 1.5em;
+  border-radius: 1rem;
+-webkit-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
+-moz-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
+box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
 }
 
 .contentText {
-  font-size: 15px;
+  font-size: 1em;
 }
 
-.footer {
+.hour {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  padding: 16px;
+  align-items: center;
+  font-size: 0.8em;
+  color: #DBDDE3;
+  font-weight: bold;
 }
 
-.timeText {
-  font-size: 13px;
-  color: #3D7E9A;
-  font-weight: bold;
+.altBody {
+  order: 1;
+  align-self: flex-end;
+  background-color: #5A52A5;
+  color: #EEEEEE;
+}
+
+.altContainer {
+  justify-content: flex-end;
 }
