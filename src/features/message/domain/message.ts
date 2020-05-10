@@ -7,3 +7,8 @@ export interface Message {
   content: string
   date: string
 }
+
+export interface NewMessageData {
+  conversationId: string;
+  message: Message;
+}

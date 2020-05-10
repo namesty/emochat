@@ -1,7 +1,7 @@
 import React from 'react'
 import { Conversation } from '../../conversation/domain/conversation'
 import { Auth } from '../../auth/domain/auth'
-import { MessageBubble } from './messageBubble'
+import { MessageBubble } from './bubble/messageBubble'
 
 interface Props {
   conversation: Conversation

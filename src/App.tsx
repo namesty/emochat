@@ -4,7 +4,7 @@ import './App.css';
 import { AuthService } from './features/auth/domain/auth-service';
 import { UserList } from './features/user/ui/userList';
 import { Login } from './features/auth/ui/login';
-import { ConversationScreen } from './features/conversation/ui/messages/conversationScreen';
+import { ConversationScreen } from './features/conversation/ui/conversationScreen';
 
 function App() {
 

@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import styles from "./conversationScreen.module.css";
-import { ConversationList } from "../conversations/conversationList";
-import { Conversation } from "../../domain/conversation";
-import { ConversationRepositoryFactory } from "../../infrastructure/conversation-repository-factory";
-import { AuthService } from "../../../auth/domain/auth-service";
-import { MessageList } from "../../../message/ui/messageList";
-import { Message } from "../../../../Message";
+import { ConversationList } from "./list/conversationList";
+import { Conversation } from "../domain/conversation";
+import { ConversationRepositoryFactory } from "../infrastructure/conversation-repository-factory";
+import { AuthService } from "../../auth/domain/auth-service";
+import { MessageList } from "../../message/ui/messageList";
 import { useHistory } from "react-router-dom";
-import { User } from "../../../user/domain/user";
-import { Input } from "../../../../core/components/input/input";
-import { Header } from "../header/conversationHeader";
-
-interface NewMessage {
-  conversationId: string;
-  message: Message;
-}
+import { User } from "../../user/domain/user";
+import { Header } from "./header/conversationHeader";
+import { MessageInput } from "../../message/ui/input/messageInput";
+import { EmotionRepositoryFactory } from "../../emotion/infrastructure/emotion-repository-factory";
+import { Emotion } from "../../emotion/domain/emotion";
+import { NewMessageData } from "../../message/domain/message";
+import { NewMessageParams } from "../../message/domain/messageParams";
 
 interface Props {
   authService: AuthService;
@@ -25,6 +23,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   const [messageText, setMessageText] = useState("");
   const [socket, setSocket] = useState<SocketIOClient.Socket>();
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [emotion, setEmotion] = useState<Emotion>()
   const [currentConvo, setCurrentConvo] = useState<Conversation>(
     conversations[0]
   );
@@ -47,7 +46,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
         socket.emit("sendToken", authData.token);
       });
 
-      socket.on("newMessage", (newMessage: NewMessage) =>
+      socket.on("newMessage", (newMessage: NewMessageData) =>
         addMessageToConvo(newMessage, conversationsRef.current)
       );
 
@@ -61,10 +60,11 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
     }
   }, []);
 
-  const conversationRepository = ConversationRepositoryFactory.build();
+  const conversationRepository = ConversationRepositoryFactory.build()
+  const emotionRepository = EmotionRepositoryFactory.build()
 
   const addMessageToConvo = (
-    newMessage: NewMessage,
+    newMessage: NewMessageData,
     conversationsRef: Conversation[]
   ) => {
     console.log(newMessage, conversationsRef);
@@ -80,6 +80,17 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
 
     setConversations(updatedConvos);
   };
+
+  const analyzeMessages = async () => {
+    const messagesToAnalyze = currentConvo.messages.filter(m => {
+      return m.from.email !== authData?.user.email
+    })
+    .slice(0, 10)
+
+    emotionRepository.analyzeMessages(messagesToAnalyze)
+
+    console.log(messagesToAnalyze)
+  }
 
   if (!authData) {
     history.push("/login");
@@ -99,13 +110,13 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   };
 
   const sendMessage = () => {
-    const message: Message = {
+    const message = {
       from: authData.user,
       content: messageText,
       date: Date.now().toString(),
     };
 
-    const newMessage: NewMessage = {
+    const newMessage: NewMessageParams = {
       conversationId: currentConvo.id,
       message,
     };
@@ -145,7 +156,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
             <MessageList conversation={currentConvo} authData={authData} />
           </div>
           <div className={styles.chatInputContainer}>
-            <Input onChange={onChangeInput} value={messageText} onClickButton={sendMessage} />
+            <MessageInput onChange={onChangeInput} value={messageText} onClickSend={sendMessage} onClickEmotion={analyzeMessages}/>
           </div>
         </div>
       }

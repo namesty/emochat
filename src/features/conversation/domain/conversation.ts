@@ -1,5 +1,5 @@
 import { User } from "../../user/domain/user";
-import { Message } from "../../../Message";
+import { Message } from "../../message/domain/message";
 
 export interface Conversation {
   id: string,

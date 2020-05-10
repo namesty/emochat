@@ -1,7 +1,7 @@
 import { ConversationRepository } from "../domain/conversation-repository";
 import { http, createAuthHeader } from "../../../core/http/axios";
 import { Conversation } from "../domain/conversation";
-import { Message } from "../../../Message";
+import { MessageParams } from "../../message/domain/messageParams";
 
 //TODO: inyectar http por constructor
 export class ConversationHttpRepository implements ConversationRepository {
@@ -33,7 +33,7 @@ export class ConversationHttpRepository implements ConversationRepository {
 
   async addMessage(
     conversationId: string,
-    message: Message
+    message: MessageParams
   ): Promise<Conversation> {
     const response = await http.put(
       `/conversation/${conversationId}`,
