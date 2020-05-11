@@ -14,6 +14,7 @@ import { EmotionRepositoryFactory } from "../../emotion/infrastructure/emotion-r
 import { Emotion } from "../../emotion/domain/emotion";
 import { NewMessageData } from "../../message/domain/message";
 import { NewMessageParams } from "../../message/domain/messageParams";
+import { EmotionService } from "../../emotion/domain/emotion-service";
 
 interface Props {
   authService: AuthService;
@@ -23,17 +24,31 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   const [messageText, setMessageText] = useState("");
   const [socket, setSocket] = useState<SocketIOClient.Socket>();
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [emotion, setEmotion] = useState<Emotion>()
+  const [background, setBackground] = useState<string>()
   const [currentConvo, setCurrentConvo] = useState<Conversation>(
     conversations[0]
   );
   const conversationsRef = useRef(conversations);
   const history = useHistory();
   const authData = authService.getFromStorage();
+  const emotionService = new EmotionService()
 
   useEffect(() => {
     conversationsRef.current = conversations
   });
+
+  useEffect(() => {
+    if(currentConvo) {
+      const lastEmotion = currentConvo.emotions.slice(-1)[0]
+      const gradient = lastEmotion && emotionService.getGradient(3, lastEmotion)
+      
+      if(gradient) {
+        setBackground(gradient)
+      } else {
+        setBackground(undefined)
+      }
+    }
+  })
 
   //extraer sockets etc en otra clase. Colocarlo en el dominio de application
 
@@ -82,14 +97,10 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   };
 
   const analyzeMessages = async () => {
-    const messagesToAnalyze = currentConvo.messages.filter(m => {
-      return m.from.email !== authData?.user.email
-    })
-    .slice(0, 10)
-
-    emotionRepository.analyzeMessages(messagesToAnalyze)
-
-    console.log(messagesToAnalyze)
+    const emotion = await emotionRepository.analyzeLastNMessages(5, currentConvo.id)
+    const gradientString = emotionService.getGradient(3, emotion)
+    currentConvo.emotions.push(emotion)
+    setBackground(gradientString)
   }
 
   if (!authData) {
@@ -152,7 +163,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
         currentConvo && 
         <div className={styles.chatScreen}>
           <Header fullName={filterUsers(currentConvo.users)}/>
-          <div className={styles.chatBody}>
+          <div className={styles.chatBody} style={background? {background}: {}}>
             <MessageList conversation={currentConvo} authData={authData} />
           </div>
           <div className={styles.chatInputContainer}>
