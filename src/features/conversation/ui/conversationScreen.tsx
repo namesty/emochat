@@ -24,7 +24,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   const [messageText, setMessageText] = useState("");
   const [socket, setSocket] = useState<SocketIOClient.Socket>();
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [background, setBackground] = useState<string>()
+  const [gradient, setGradient] = useState<string>()
   const [currentConvo, setCurrentConvo] = useState<Conversation>(
     conversations[0]
   );
@@ -43,9 +43,9 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
       const gradient = lastEmotion && emotionService.getGradient(3, lastEmotion)
       
       if(gradient) {
-        setBackground(gradient)
+        setGradient(gradient)
       } else {
-        setBackground(undefined)
+        setGradient(undefined)
       }
     }
   })
@@ -100,7 +100,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
     const emotion = await emotionRepository.analyzeLastNMessages(5, currentConvo.id)
     const gradientString = emotionService.getGradient(3, emotion)
     currentConvo.emotions.push(emotion)
-    setBackground(gradientString)
+    setGradient(gradientString)
   }
 
   if (!authData) {
@@ -163,7 +163,8 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
         currentConvo && 
         <div className={styles.chatScreen}>
           <Header fullName={filterUsers(currentConvo.users)}/>
-          <div className={styles.chatBody} style={background? {background}: {}}>
+          <div className={styles.chatBody}>
+            <div style={{width: '100%', height: 15, background: gradient? gradient: ''}}></div>
             <MessageList conversation={currentConvo} authData={authData} />
           </div>
           <div className={styles.chatInputContainer}>

@@ -5,6 +5,7 @@ import { AuthService } from './features/auth/domain/auth-service';
 import { UserList } from './features/user/ui/userList';
 import { Login } from './features/auth/ui/login';
 import { ConversationScreen } from './features/conversation/ui/conversationScreen';
+import { Signup } from './features/auth/ui/signup';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <ConversationScreen authService={authServ}/>
       </Route>
       <Route path="/login" exact component={Login} />
+      <Route path="/signup" exact component={Signup} />
       <Route path="/users" exact component={UserList} />
     </Router>
   );

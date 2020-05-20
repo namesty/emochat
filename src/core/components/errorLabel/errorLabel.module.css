@@ -1,0 +1,11 @@
+.errorLabel {
+  color: red;
+  padding-top: 5;
+  font-size: 14px;
+  width: 100%;
+}
+
+.errorContainer {
+  padding-left: 15;
+  padding-bottom: 15;
+}

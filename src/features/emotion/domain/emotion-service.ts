@@ -4,8 +4,6 @@ type Keys = 'Happy' | 'Angry' | 'Fear' | 'Bored' | 'Excited' | 'Sad'
 
 export class EmotionService {
 
-  private defaultColor = "#FAFBFD"
-
   private colorMap = {
     Happy: "#F0C430",
     Angry: "#E54D40",
@@ -68,6 +66,6 @@ export class EmotionService {
       }
 
       return prev + `${this.colorMap[current.feeling as Keys]} ${breakpoints[i]}%)`
-    }, `linear-gradient(to bottom right, `)
+    }, `linear-gradient(to right, `)
   }
 }
