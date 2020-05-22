@@ -5,7 +5,11 @@ import { UserItem } from './user'
 import { ConversationRepositoryFactory } from '../../conversation/infrastructure/conversation-repository-factory'
 import { useHistory } from 'react-router-dom'
 
-export const UserList: React.FC = () => {
+interface Props {
+  setSelectedUsersCallback: (selectedUsers: User[]) => void
+}
+
+export const UserList: React.FC<Props> = ({ setSelectedUsersCallback }) => {
   const [users, setUsers] = useState<User[]>([])
   const [selectedUsers, setSelectedUsers] = useState<User[]>([])
   const history = useHistory()
@@ -14,35 +18,41 @@ export const UserList: React.FC = () => {
     fetchUsers()
   }, [])
 
+  setSelectedUsersCallback(selectedUsers)
+
   const userRepository = UserRepositoryFactory.build()
-  const conversationRepository = ConversationRepositoryFactory.build()
   
   async function fetchUsers() {
     const users = await userRepository.findAll()
     setUsers(users)
   }
 
-  const selectUser = (selectedUser: User) => {
-    const alreadySelected = selectedUsers.find(u => u.id === selectedUser.id)
+  const selectUser = (selectedUser: User, alreadySelected: boolean) => {
 
     if(!alreadySelected) {
       setSelectedUsers([...selectedUsers, selectedUser])
+    } else {
+      setSelectedUsers(selectedUsers.filter(u => u.email !== selectedUser.email))
     }
-  }
-
-  const createConversation = async () => {
-    await conversationRepository.createConversation(selectedUsers.map(u => u.id))
-    history.push('/home')
   }
 
   return (
     <div>
       <div>
         {users.map(user => {
-          return <UserItem key={user.id} user={user} onClick={() => selectUser(user)}/>
+
+          const alreadySelected = selectedUsers.some(u => u.email === user.email)
+
+          return (
+            <UserItem 
+              key={user.id} 
+              user={user} 
+              style={{background: alreadySelected? 'gray': 'white'}} 
+              onClick={() => selectUser(user, alreadySelected)}
+            />
+          )
         })}
       </div>
-      <button onClick={createConversation}>Confirm</button>
     </div>
 
   )

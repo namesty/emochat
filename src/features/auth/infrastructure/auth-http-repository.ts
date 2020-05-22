@@ -4,6 +4,7 @@ import { UserDTOToUserMapper } from "../../user/infrastructure/user-dto-mapper"
 import { Auth } from "../domain/auth"
 import { http } from "../../../core/http/axios"
 import { AuthDTO } from "./auth-dto"
+import { UserDTO } from "../../user/infrastructure/user-dto"
 
 export class AuthHttpRepository implements AuthRepository {
   constructor(
@@ -22,5 +23,17 @@ export class AuthHttpRepository implements AuthRepository {
     localStorage.setItem('user', JSON.stringify(auth.user))
 
     return auth
+  }
+
+  async signup(name: string, lastName: string, email: string, password: string): Promise<Auth> {
+    const response = await http.post<UserDTO>('/auth/signup', {
+      email,
+      password,
+      name,
+      lastName
+    })
+    const user = this.userDTOToUserMapper.map(response.data)
+
+    return await this.login(user.email, password)
   }
 }

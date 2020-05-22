@@ -2,7 +2,7 @@ import React from 'react'
 import { ListItem } from '../../../core/components/listItem'
 import { User } from '../domain/user'
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   user: User
 }
 

@@ -6,6 +6,9 @@ import { UserList } from './features/user/ui/userList';
 import { Login } from './features/auth/ui/login';
 import { ConversationScreen } from './features/conversation/ui/conversationScreen';
 import { Signup } from './features/auth/ui/signup';
+import Modal from 'react-modal'
+
+Modal.setAppElement('#root');
 
 function App() {
 

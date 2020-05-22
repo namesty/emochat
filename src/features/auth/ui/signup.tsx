@@ -46,7 +46,7 @@ export const Signup: React.FC = () => {
 
   const onSubmit = async (event: any) => {
     event.preventDefault()
-    await authRepository.login(email, password)
+    await authRepository.signup(firstName, lastName, email, password)
     history.push('/home')
   }
 
@@ -79,7 +79,7 @@ export const Signup: React.FC = () => {
       <form onSubmit={onSubmit}>
         <div className={styles.formContainer}>
           <div className={styles.titleContainer}>
-            <h1>Login</h1>
+            <h1>Signup</h1>
           </div>
           <div className={styles.inputsContainer}>
             <div className={styles.input}>
@@ -135,7 +135,7 @@ export const Signup: React.FC = () => {
           </div>
           <div className={styles.submitButtonContainer}>
             <button type="submit" className={styles.submitButton} disabled={!!shouldDisable}>
-              Login
+              Signup
             </button>
           </div>
           <div className={styles.footer}>

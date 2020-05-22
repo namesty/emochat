@@ -1,0 +1,11 @@
+.header {
+  background: #EDEDED;
+  color: #919191;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1.25rem;
+  border-right: solid 2px gainsboro;
+  height: 50px;
+}

@@ -11,10 +11,11 @@ import { User } from "../../user/domain/user";
 import { Header } from "./header/conversationHeader";
 import { MessageInput } from "../../message/ui/input/messageInput";
 import { EmotionRepositoryFactory } from "../../emotion/infrastructure/emotion-repository-factory";
-import { Emotion } from "../../emotion/domain/emotion";
 import { NewMessageData } from "../../message/domain/message";
 import { NewMessageParams } from "../../message/domain/messageParams";
 import { EmotionService } from "../../emotion/domain/emotion-service";
+import { Toolbar } from "../../../application/ui/toolbar/toolbar";
+import { MessageSocket } from "../../message/infrastructure/sockets";
 
 interface Props {
   authService: AuthService;
@@ -32,6 +33,7 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   const history = useHistory();
   const authData = authService.getFromStorage();
   const emotionService = new EmotionService()
+  const isGroup = currentConvo && currentConvo.users.length > 2
 
   useEffect(() => {
     conversationsRef.current = conversations
@@ -78,11 +80,12 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   const conversationRepository = ConversationRepositoryFactory.build()
   const emotionRepository = EmotionRepositoryFactory.build()
 
+  console.log(socket)
+
   const addMessageToConvo = (
     newMessage: NewMessageData,
     conversationsRef: Conversation[]
   ) => {
-    console.log(newMessage, conversationsRef);
 
     const updatedConvos = conversationsRef.map((convo) => {
       if (convo.id !== newMessage.conversationId) {
@@ -145,33 +148,58 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
     }, '')
   }
 
+  const onCreateNewConversation = (newConversation: Conversation) => {
+    setConversations([...conversations, newConversation])
+    setCurrentConvo(newConversation)
+  }
+
+  const deleteConversation = async (conversationId: string) => {
+    await conversationRepository.deleteConversation(conversationId)
+
+    const remainingConversations = conversations.filter(c => c.id !== conversationId)
+    if(currentConvo.id === conversationId) {
+      setCurrentConvo(remainingConversations[0])
+    }
+    
+    setConversations(remainingConversations)
+  }
+
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.conversationsContainer}>
-        <div className={styles.header}>
-          <p>CONVERSATIONS</p>
+    <>
+      <div className={styles.backgroundDecoration}></div>
+      <div className={styles.backgroundContainer}>
+        <div className={styles.mainContainer}>
+          <div className={styles.conversationsContainer}>
+            <Toolbar 
+              authService={authService}
+              createNewConversation={onCreateNewConversation}
+            />
+            {
+              <ConversationList
+                authData={authData}
+                conversations={conversations}
+                selectConversation={selectConversation}
+                deleteConversation={deleteConversation}
+              />
+            }
+          </div>
+          <div className={styles.chatScreen}>
+            <Header fullName={ currentConvo && filterUsers(currentConvo.users)} gradient={gradient}/>
+            { currentConvo && 
+              <>
+                <div className={styles.chatBody}>
+                  <div className={styles.messagesContainer}>
+                    <MessageList isGroup={isGroup} conversation={currentConvo} authData={authData} />
+                  </div>
+                </div>
+                <div className={styles.chatInputContainer}>
+                  <MessageInput onChange={onChangeInput} value={messageText} onClickSend={sendMessage} onClickEmotion={analyzeMessages}/>
+                </div>
+              </>
+            }
+          </div>
         </div>
-        {
-          <ConversationList
-            authData={authData}
-            conversations={conversations}
-            selectConversation={selectConversation}
-          />
-        }
       </div>
-      {
-        currentConvo && 
-        <div className={styles.chatScreen}>
-          <Header fullName={filterUsers(currentConvo.users)}/>
-          <div className={styles.chatBody}>
-            <div style={{width: '100%', height: 15, background: gradient? gradient: ''}}></div>
-            <MessageList conversation={currentConvo} authData={authData} />
-          </div>
-          <div className={styles.chatInputContainer}>
-            <MessageInput onChange={onChangeInput} value={messageText} onClickSend={sendMessage} onClickEmotion={analyzeMessages}/>
-          </div>
-        </div>
-      }
-    </div>
+    </>
   );
 };
