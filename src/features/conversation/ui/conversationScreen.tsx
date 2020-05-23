@@ -100,7 +100,8 @@ export const ConversationScreen: React.FC<Props> = ({ authService }) => {
   };
 
   const analyzeMessages = async () => {
-    const emotion = await emotionRepository.analyzeLastNMessages(5, currentConvo.id)
+    const emotions = await emotionRepository.analyzeLastNMessages(5, currentConvo.id)
+    const emotion = emotions[0]
     const gradientString = emotionService.getGradient(3, emotion)
     currentConvo.emotions.push(emotion)
     setGradient(gradientString)
