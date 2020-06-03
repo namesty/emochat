@@ -3,9 +3,7 @@
   display: flex;
   background-color: white;
   align-items: center;
-  -webkit-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
-  -moz-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
-  box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
+  border-top: solid 2px gainsboro;
 }
 
 .button {
@@ -14,17 +12,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
-  -moz-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
-  box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
 }
 
 .emotionsButton {
-  background: #f63559
+  background: #4a4a4a
 }
 
 .sendButton {
-  background-color: #5A52A5;
+  background-color: #313131;
 }
 
 .input {

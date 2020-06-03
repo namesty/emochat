@@ -47,7 +47,7 @@ export const UserList: React.FC<Props> = ({ setSelectedUsersCallback }) => {
             <UserItem 
               key={user.id} 
               user={user} 
-              style={{background: alreadySelected? 'gray': 'white'}} 
+              style={{background: alreadySelected? 'gainsboro': 'white'}} 
               onClick={() => selectUser(user, alreadySelected)}
             />
           )

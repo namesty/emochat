@@ -2,19 +2,27 @@ import React from 'react'
 import styles from './messageInput.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faBrain } from '@fortawesome/free-solid-svg-icons'
+import { CustomLoader } from '../../../../core/components/loader/loader'
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   onClickSend?: () => void
   onClickEmotion?: () => Promise<void>
+  loadingEmotion: boolean
 }
 
-export const MessageInput: React.FC<Props> = ({onClickSend, onClickEmotion, ...rest}) => {
+export const MessageInput: React.FC<Props> = ({onClickSend, onClickEmotion, loadingEmotion, ...rest}) => {
   return (
     <div className={styles.container}>
       <input {...rest} className={styles.input} />
-      <a className={`${styles.button} ${styles.emotionsButton}`} onClick={onClickEmotion}>
-        <FontAwesomeIcon color={'#eeeeee'} icon={faBrain}/>
-      </a>
+      {
+        loadingEmotion?
+        <a className={`${styles.button} ${styles.emotionsButton}`}>
+          <CustomLoader height={20} width={20} color={'#eeeeee'}/>
+        </a>:
+        <a className={`${styles.button} ${styles.emotionsButton}`} onClick={onClickEmotion}>
+          <FontAwesomeIcon color={'#eeeeee'} icon={faBrain}/>
+        </a>
+      }
       <a className={`${styles.button} ${styles.sendButton}`} onClick={onClickSend}>
         <FontAwesomeIcon color={'#eeeeee'} icon={faPaperPlane}/>
       </a>

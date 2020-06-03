@@ -1,0 +1,27 @@
+.createButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4a4a4a;
+  color: #EEEEEE;
+  border: 0;
+  height: 35px;
+}
+
+.buttonContainer {
+  padding-top: 30px;
+}
+
+.userList {
+  overflow-y: auto;
+  height: 85%;
+  margin-right: -20px;
+  margin-left: -20px;
+}
+
+.headerContainer {
+  margin: -20px;
+  padding-bottom: 20px;
+  height: 50px;
+}

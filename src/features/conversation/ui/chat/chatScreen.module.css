@@ -1,0 +1,33 @@
+.messagesContainer {
+  padding-left: 5%;
+  padding-right: 5%;
+  overflow-y: auto;
+  height: 74vh;
+}
+
+.conversationsContainer {
+  width: 300px;
+  flex-direction: column;
+  background-color: #FAFBFD;
+  border-right: solid 2px gainsboro;
+}
+
+.chatScreen {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  .messagesContainer {
+    height: 85vh;
+  }
+  .chatScreen {
+    height: 100vh;
+  }
+
+  .conversationsContainer {
+    height: 100vh;
+  }
+}

@@ -12,18 +12,27 @@
   max-width: 300px;
   line-height: 28px;
   border-radius: 1rem;
-  -webkit-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
-  -moz-box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
-  box-shadow: 0px 0px 10px -5px rgba(5,5,5,1);
+  border: solid 2px gainsboro
 }
 
 .contentText {
   font-size: 1em;
 }
 
+.header {
+  margin: 0 -1.5em;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 0.5em 1.5em 0 1.5em;
+}
+
 .name {
-  color: orange;
+  color: #313131;
   font-size: 0.75em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-top: 0;
+  white-space: nowrap;
 }
 
 .hour {
@@ -31,8 +40,12 @@
   flex-direction: row;
   justify-content: flex-end;
   font-size: 0.75em;
-  color: rgba(205, 209, 211, 0.541);
+  color: #4a4a4a;
   font-weight: bold;
+}
+
+.altHour {
+ color: gainsboro
 }
 
 .hour > p {
@@ -42,7 +55,7 @@
 .altBody {
   order: 1;
   align-self: flex-end;
-  background-color: #5A52A5;
+  background-color: #919191;
   color: #EEEEEE;
 }
 

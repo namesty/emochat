@@ -1,32 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
-import { AuthService } from './features/auth/domain/auth-service';
-import { UserList } from './features/user/ui/userList';
 import { Login } from './features/auth/ui/login';
-import { ConversationScreen } from './features/conversation/ui/conversationScreen';
+import { ChatScreen } from './features/conversation/ui/chat/chatScreen';
 import { Signup } from './features/auth/ui/signup';
 import Modal from 'react-modal'
+import { Statistics } from './features/conversation/ui/statistics/statistics';
+import { ProtectedRoute } from './features/auth/ui/protectedRoute';
 
 Modal.setAppElement('#root');
 
 function App() {
 
-  //TODO: maybe make this static since it is not being injected
-  const authServ = new AuthService()
-
   return (
-    <Router>
-      <Route path="/home" exact>
-        <ConversationScreen authService={authServ}/>
-      </Route>
-      <Route path="/" exact>
-        <ConversationScreen authService={authServ}/>
-      </Route>
+    <Switch>
+      <ProtectedRoute path="/" exact component={ChatScreen} />
+      <ProtectedRoute path="/home" exact component={ChatScreen} />
       <Route path="/login" exact component={Login} />
       <Route path="/signup" exact component={Signup} />
-      <Route path="/users" exact component={UserList} />
-    </Router>
+      <ProtectedRoute path="/stats" exact component={Statistics} />
+    </Switch>
   );
 }
 

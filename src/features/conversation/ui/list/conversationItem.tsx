@@ -3,6 +3,7 @@ import { Conversation } from '../../domain/conversation';
 import { ListItem } from '../../../../core/components/listItem';
 import { faUser, faUsers, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { capitalize } from '../../../../utils/stringUtils';
+import { DateTime } from 'luxon';
 
 interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   conversation: Conversation
@@ -15,6 +16,8 @@ export const ConversationItem: React.FC<Props> = ({ conversation: convo, meId, d
   const notMeUsers = convo.users.filter(u => u.id !== meId)
   const lastMessage = convo.messages.length > 0 && convo.messages.slice(-1)[0];
   const isGroupChat = convo.users.length > 2
+  const isoDate = lastMessage? new Date(parseInt(lastMessage.date)).toISOString(): undefined
+  const formattedDate = isoDate? DateTime.fromISO(isoDate).toFormat('T'): undefined
 
   const usersText = notMeUsers.reduce((prev, next, i) => {
 
@@ -43,6 +46,7 @@ export const ConversationItem: React.FC<Props> = ({ conversation: convo, meId, d
         icon: faTimes,
         onPress: () => deleteConversation(convo.id)
       }}
+      rightText={formattedDate}
       {...rest}
     />
   )

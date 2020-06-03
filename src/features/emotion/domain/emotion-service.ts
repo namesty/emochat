@@ -1,19 +1,31 @@
 import { Emotion } from "./emotion";
+import { User } from "../../user/domain/user";
+import { Gradient } from "./gradient";
 
 type Keys = 'Happy' | 'Angry' | 'Fear' | 'Bored' | 'Excited' | 'Sad'
 
 export class EmotionService {
 
   private colorMap = {
-    Happy: "#F0C430",
-    Angry: "#E54D40",
-    Fear: "#995DB5",
-    Bored: "#3ACA75",
-    Excited: "#E37F31",
-    Sad: "#3081B8"
+    Happy: "#FFD333",
+    Angry: "#FF2020",
+    Fear: "#661B0B",
+    Bored: "#9090A0",
+    Excited: "#EF6F18",
+    Sad: "#37649B"
+  }
+
+  getLatestEmotionFromUser = (emotions: Emotion[], userEmail: string) => {
+    const userEmotions = emotions.filter(e => e.user.email === userEmail)
+
+    return userEmotions.sort((a, b) => {
+      return parseInt(b.date) - parseInt(a.date)
+    })[0]
   }
 
   getGradient = (n: number, emotion: Emotion) => {
+
+    //TODO: Extraer en metodos
 
     const emotionMap = {
       Happy: emotion.Happy,
@@ -57,6 +69,8 @@ export class EmotionService {
       breakpoints.push(prevBreakpointsSum + fr.value)
     })
 
+    console.log(breakpoints)
+
     //Build linear gradient string
 
     return feelingRatios.reduce((prev, current, i) => {
@@ -68,4 +82,22 @@ export class EmotionService {
       return prev + `${this.colorMap[current.feeling as Keys]} ${breakpoints[i]}%)`
     }, `linear-gradient(to right, `)
   }
+
+  getLatestUserGradient = (emotions: Emotion[], userEmail: string): string => {
+    const latestEmotion =  this.getLatestEmotionFromUser(emotions, userEmail)
+
+    if(!latestEmotion) return ''
+
+    return this.getGradient(3, latestEmotion)
+  }
+
+  getLatestUserGroupGradients = (emotions: Emotion[], conversationUsers: User[]): Gradient[] => {
+
+    return conversationUsers
+      .map(u => ({
+        user: u,
+        gradient: this.getLatestUserGradient(emotions, u.email)
+      }))
+  }
+
 }

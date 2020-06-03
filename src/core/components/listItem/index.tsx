@@ -5,25 +5,26 @@ import { IconDefinition } from '@fortawesome/free-solid-svg-icons'
 
 interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   bigText: string
-  smallText: string,
+  smallText: string
+  rightText?: string
   leftIcon?: {
-    icon: IconDefinition,
+    icon: IconDefinition
     onPress?: () => void
   }
   rightIcon?: {
-    icon: IconDefinition,
+    icon: IconDefinition
     onPress?: () => void
   }
 }
 
-export const ListItem: React.FC<Props> = ({bigText, smallText, leftIcon, rightIcon, ...rest}) => {
+export const ListItem: React.FC<Props> = ({bigText, smallText, leftIcon, rightIcon, rightText, ...rest}) => {
 
   return (
     <div className={styles.container}>
       <div className={styles.body} {...rest}>
         {
           leftIcon &&         
-          <button className={styles.iconContainer} onClick={leftIcon.onPress}>
+          <button className={`${styles.iconContainer} ${styles.leftIcon}`} onClick={leftIcon.onPress}>
             <FontAwesomeIcon color='#fff' size={'2x'} icon={leftIcon.icon}/>
           </button>
         }
@@ -35,17 +36,23 @@ export const ListItem: React.FC<Props> = ({bigText, smallText, leftIcon, rightIc
             <p className={styles.footerText}>{smallText}</p>
           </div>
         </div>
-        {
-          rightIcon &&         
-          <button className={`${styles.iconContainer} ${styles.rightIconContainer}`} onClick={(e)=> {
-            e.stopPropagation()
-            if(rightIcon.onPress) {
-              rightIcon.onPress()
-            }
-          }}>
-            <FontAwesomeIcon size={'2x'} icon={rightIcon.icon}/>
-          </button>
-        }
+        <div className={styles.rightContainer}>
+          {
+            rightIcon &&      
+            <button className={`${styles.iconContainer} ${styles.rightIcon}`} onClick={(e)=> {
+              e.stopPropagation()
+              if(rightIcon.onPress) {
+                rightIcon.onPress()
+              }
+            }}>
+              <FontAwesomeIcon icon={rightIcon.icon} color={'#919191'}/>
+            </button>
+          }
+          {
+            rightText &&
+            <p className={styles.rightText}>{rightText}</p>
+          }
+        </div>
       </div>
     </div>
   )

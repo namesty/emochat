@@ -6,6 +6,6 @@
   justify-content: flex-end;
   align-items: center;
   font-size: 1.25rem;
-  border-right: solid 2px gainsboro;
-  height: 50px;
+  height: 48px;
+  border-bottom: solid 2px gainsboro;
 }
