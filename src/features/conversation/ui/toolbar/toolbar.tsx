@@ -59,9 +59,7 @@ export const Toolbar: React.FC<Props> = ({
         onPress={() => history.push('/stats')}
       />
 
-      <Icon icon={faInfoCircle} onPress={onModalOpen}/>
-
-      <Icon icon={faPlus} onPress={onModalOpen}/>
+      <Icon icon={faPlus} onPress={onModalOpen} data-testid={'new-convo'}/>
 
       <ConversationCreateModal
         conversations={conversations}

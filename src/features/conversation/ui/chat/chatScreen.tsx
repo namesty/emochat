@@ -19,6 +19,7 @@ import { MessageInput } from "../../../message/ui/input/messageInput";
 import { AuthServiceFactory } from "../../../auth/infrastructure/auth-service-factory";
 import { Auth } from "../../../auth/domain/auth";
 import { CustomLoader } from "../../../../core/components/loader/loader";
+import { toast } from "react-toastify";
 
 export const ChatScreen: React.FC = () => {
   const [messageText, setMessageText] = useState("");
@@ -28,6 +29,7 @@ export const ChatScreen: React.FC = () => {
   const [currentConvo, setCurrentConvo] = useState<Conversation>(
     conversations[0]
   );
+  const [online, setOnline] = useState(false)
   const [loadingConversations, setLoadingConversations] = useState(false)
   const [loadingEmotions, setLoadingEmotions] = useState(false)
   const conversationsRef = useRef(conversations);
@@ -58,14 +60,35 @@ export const ChatScreen: React.FC = () => {
   useEffect(() => {
       fetchConversations();
 
-      const socket = io("http://192.168.1.40:3500");
+      if(!process.env.REACT_APP_SOCKET_URL) {
+        throw new Error('Socket URL must be set in .env file')
+      }
+
+      const socket = io(process.env.REACT_APP_SOCKET_URL);
       socket.on("askForToken", () => {
         socket.emit("sendToken", authData.token);
       });
 
-      socket.on("newMessage", (newMessage: NewMessageData) =>
+      socket.on('connect', () => {
+        setOnline(true)
+      })
+
+      socket.on('disconnect', (reason: string) => {
+        toast.error('You have been disconnected from server')
+        setOnline(false)
+
+        if (reason === 'io server disconnect') {
+          socket.connect();
+        }
+      })
+
+      socket.on("newMessage", (newMessage: NewMessageData) => {
+        if(typeof newMessage === 'string') {
+          newMessage = JSON.parse(newMessage)
+        }
+
         addMessageToConvo(newMessage, conversationsRef.current)
-      );
+      });
 
       setSocket(socket);
 
@@ -81,6 +104,7 @@ export const ChatScreen: React.FC = () => {
     newMessage: NewMessageData,
     conversationsRef: Conversation[],
   ) => {
+
     const updatedConvos = conversationsRef.map((convo) => {
       if (convo.id !== newMessage.conversationId) {
         return convo;
@@ -145,8 +169,11 @@ export const ChatScreen: React.FC = () => {
       message,
     };
 
-    if (socket) {
+    if (socket && online) {
       socket.emit("newMessage", newMessage);
+      setMessageText('')
+    } else {
+      toast.error('You are offline')
     }
   };
 
@@ -220,6 +247,7 @@ export const ChatScreen: React.FC = () => {
                 onClickSend={sendMessage}
                 onClickEmotion={analyzeMessages}
                 loadingEmotion={loadingEmotions}
+                online={online}
               />
             </div>
           </>

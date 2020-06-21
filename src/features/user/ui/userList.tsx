@@ -38,7 +38,7 @@ export const UserList: React.FC<Props> = ({ setSelectedUsersCallback }) => {
 
   return (
     <div>
-      <div>
+      <div data-testid={'user-list'}>
         {users.map(user => {
 
           const alreadySelected = selectedUsers.some(u => u.email === user.email)

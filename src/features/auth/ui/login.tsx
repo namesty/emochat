@@ -3,17 +3,25 @@ import { AuthRepositoryFactory } from '../infrastructure/auth-repository-factory
 import { useHistory } from 'react-router-dom'
 import styles from './login.module.css'
 import { Input } from '../../../core/components/input/input'
+import { CustomLoader } from '../../../core/components/loader/loader'
 
 export const Login: React.FC = () => {
   const authRepository = AuthRepositoryFactory.build()
+  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const history = useHistory()
 
   const onSubmit = async (event: any) => {
     event.preventDefault()
-    await authRepository.login(email, password)
-    history.push('/home')
+    try {
+      setLoading(true)
+      await authRepository.login(email, password)
+      history.push('/home')
+    } finally {
+      setLoading(false)
+    }
+
   }
 
   const onChangeEmail = (event: any) => {
@@ -33,7 +41,7 @@ export const Login: React.FC = () => {
       <form onSubmit={onSubmit}>
         <div className={styles.formContainer}>
           <div className={styles.titleContainer}>
-            <h1>Login</h1>
+            <h1 className={styles.titleText}>LOGIN</h1>
           </div>
           <div className={styles.inputsContainer}>
             <div className={styles.input}>
@@ -41,6 +49,7 @@ export const Login: React.FC = () => {
               <Input
                 type='text'
                 name='email'
+                data-testid={'i-email'}
                 onChange={onChangeEmail}
               />
             </div>
@@ -49,13 +58,14 @@ export const Login: React.FC = () => {
               <Input
                 type='password'
                 name='password'
+                data-testid={'i-password'}
                 onChange={onChangePassword}
               />
             </div>
           </div>
           <div className={styles.submitButtonContainer}>
-            <button type="submit" className={styles.submitButton}>
-              Login
+            <button type="submit" className={styles.submitButton} disabled={loading}>
+              {loading? <CustomLoader height={20} width={20} color={'#eeeeee'}/> : 'Login'}
             </button>
           </div>
           <div className={styles.footer}>

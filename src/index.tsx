@@ -4,11 +4,16 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+require('dotenv').config()
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+      <ToastContainer/>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

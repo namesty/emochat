@@ -12,7 +12,7 @@ interface Props {
 
 export const ConversationList: React.FC<Props> = ({conversations, authData, selectConversation, deleteConversation}) => {
   return (
-    <div>
+    <div data-testid={'convolist'}>
       { authData && conversations.map( convo => {
         return (
           <ConversationItem

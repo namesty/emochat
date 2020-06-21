@@ -68,7 +68,7 @@ export const ConversationCreateModal: React.FC<Props> = ({
           text="Select one or more users to start a conversation with"
         />
       </div>
-      <div className={styles.userList}>
+      <div className={styles.userList} data-testid={'modal-list'}>
         <UserList
           setSelectedUsersCallback={setSelectedUsers}
         />
