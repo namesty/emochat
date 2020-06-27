@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Conversation } from '../../conversation/domain/conversation'
 import { Auth } from '../../auth/domain/auth'
 import { MessageBubble } from './bubble/messageBubble'
@@ -26,8 +26,19 @@ export const MessageList: React.FC<Props> = ({conversation, authData, isGroup, g
     return [u.email, possibleColors[randomNum]]
   }))
 
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if(ref.current !== null) {
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end'
+      })
+    }
+  })
+
   return (
-    <div>
+    <div ref={ref}>
       {
         conversation.messages.map((message, i) => {
 

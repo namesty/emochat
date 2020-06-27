@@ -19,12 +19,9 @@ export const Statistics: React.FC = () => {
     fetchStatistics()
   }, [])
 
-  console.log(myEmotionsData)
-
   const fetchStatistics = async () => {
     setLoading(true)
     const othersEmotions = await conversationRepository.getAvgEmotionsProvokedByMeInOthers()
-    console.log(othersEmotions)
     const myEmotions = await conversationRepository.getAvgEmotionsProvokedInMe()
     setLoading(false)
 

@@ -135,10 +135,16 @@ export const ChatScreen: React.FC = () => {
       5,
       currentConvo.id
     );
+
     const gradientStrings = emotionService.getLatestUserGroupGradients(
       emotions,
       currentConvo.users
     );
+
+    setCurrentConvo({
+      ...currentConvo,
+      emotions: [...currentConvo.emotions, ...emotions]
+    })
     setLoadingEmotions(false)
     setGradients(gradientStrings);
   };

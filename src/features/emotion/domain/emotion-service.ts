@@ -18,14 +18,10 @@ export class EmotionService {
   getLatestEmotionFromUser = (emotions: Emotion[], userEmail: string) => {
     const userEmotions = emotions.filter(e => e.user.email === userEmail)
 
-    return userEmotions.sort((a, b) => {
-      return parseInt(b.date) - parseInt(a.date)
-    })[0]
+    return userEmotions.slice(-1)[0]
   }
 
   getGradient = (n: number, emotion: Emotion) => {
-
-    //TODO: Extraer en metodos
 
     const emotionMap = {
       Happy: emotion.Happy,
@@ -37,6 +33,7 @@ export class EmotionService {
     }
 
     //Sort N emotion feelings by value
+
     const strongestFeelings = Object.entries(emotionMap).sort(([aKey, aVal], [bKey, bVal]) => {
       return bVal - aVal
     })
@@ -68,8 +65,6 @@ export class EmotionService {
 
       breakpoints.push(prevBreakpointsSum + fr.value)
     })
-
-    console.log(breakpoints)
 
     //Build linear gradient string
 

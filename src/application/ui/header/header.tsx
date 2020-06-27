@@ -17,6 +17,7 @@ export const Header: React.FC<Props> = ({ text, gradient, showBackButton }) => {
     <div
       className={styles.container}
       style={{ background: gradient ? gradient : "" }}
+      data-testid={'conversation-header'}
     >
       <div className={styles.innerContainer}>
         {showBackButton && (

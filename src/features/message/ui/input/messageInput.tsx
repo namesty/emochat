@@ -26,6 +26,11 @@ export const MessageInput: React.FC<Props> = ({
         disabled={!online}
         placeholder={online ? "" : "You are offline, attempting to reconnect"}
         data-testid={'message-input'}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && onClickSend) {
+            onClickSend()
+          }
+        }}
       />
       {loadingEmotion ? (
         <a className={`${styles.button} ${styles.emotionsButton}`}>

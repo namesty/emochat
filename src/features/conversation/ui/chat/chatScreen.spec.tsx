@@ -4,17 +4,18 @@ import {
   render,
   getByTestId,
   waitForElement,
-  getByRole,
   fireEvent,
+  cleanup
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { ChatScreen } from "./chatScreen";
 import axios from "axios";
 import { ConversationMother } from "../../domain/conversation-mother";
 import { Server } from "mock-socket";
-import { Message, NewMessageData } from "../../../message/domain/message";
+import { NewMessageData } from "../../../message/domain/message";
 import { MessageMother } from "../../../message/domain/message-mother";
 import { NewMessageParams } from "../../../message/domain/messageParams";
+import { EmotionMother } from "../../../emotion/domain/emotion-mother";
 
 require("dotenv").config();
 
@@ -33,6 +34,8 @@ describe("Conversation Screen", () => {
     localStorage.clear();
     socketServer.stop();
   });
+
+  afterEach(cleanup)
 
   beforeEach(() => {
     mockAxios.get.mockResolvedValueOnce({
@@ -122,5 +125,24 @@ describe("Conversation Screen", () => {
     expect((messageReceived as NewMessageParams).message.content).toMatch('Testing socket')
   });
 
-  it.todo("Analyzes messages and paints header");
+  it("Analyzes messages and paints header", async () => {
+    const { container } = render(<ChatScreen />);
+
+    await waitForElement(() => {
+      return getByTestId(container, "convolist");
+    });
+
+    const messageInput = getByTestId(container, "message-input");
+    const conversationHeader = getByTestId(container, "conversation-header")
+    const analyzeButton = messageInput.nextElementSibling as Element
+
+    mockAxios.post.mockResolvedValueOnce({
+      data: EmotionMother.emotions(),
+    });
+
+    fireEvent.click(analyzeButton)
+
+    //TODO: test window painting
+
+  });
 });
