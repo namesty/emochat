@@ -1,40 +1,28 @@
 import io from "socket.io-client";
-import { NewMessageData } from '../domain/message'
-import { Auth } from "../../auth/domain/auth";
-import { NewMessageParams } from "../domain/messageParams";
-
-interface Props {
-  authData: Auth
-  newMessageHandler: (newMessage: NewMessageData) => void
+interface Params {
+  wsURL: string
+  token: string
+  onConnect: Function
+  onDisconnect: Function
+  onNewMessage: Function
 }
 
-export class MessageSocket {
+export const startSocketClient = (params: Params) => {
 
-  private socketClient: any
+  const { wsURL, token, onConnect, onDisconnect, onNewMessage } = params
 
-  constructor(props: Props) {
-    if(!this.socketClient) {
-      this.socketClient = io("http://192.168.1.40:3500")
-      this.attachHandlers(props)
-    }
-  }
-
-  private attachHandlers = (props: Props) => {
-    const socket = this.socketClient
-
+  const socket = io(wsURL);
     socket.on("askForToken", () => {
-      socket.emit("sendToken", props.authData.token);
-    })
-    socket.on("newMessage", props)
-  }
+      socket.emit("sendToken", token);
+    });
 
-  public sendMessage = (newMessage: NewMessageParams) => {
-    this.socketClient.emit("newMessage", newMessage);
-  }
+    socket.on('connect', onConnect)
 
-  public close = () => {
-    this.socketClient.close()
-  }
+    socket.on('disconnect', onDisconnect)
+
+    socket.on("newMessage", onNewMessage);
+
+  return socket
 }
 
       

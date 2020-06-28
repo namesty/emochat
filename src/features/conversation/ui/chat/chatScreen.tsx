@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
 import lodash from "lodash";
 import styles from "./chatScreen.module.css";
 import { SheetLayout } from "../../../../application/ui/sheetLayout/sheetLayout";
 import { Conversation } from "../../domain/conversation";
 import { Gradient } from "../../../emotion/domain/gradient";
 import { EmotionService } from "../../../emotion/domain/emotion-service";
-import { NewMessageData, Message } from "../../../message/domain/message";
+import { NewMessageData } from "../../../message/domain/message";
 import { ConversationRepositoryFactory } from "../../infrastructure/conversation-repository-factory";
 import { EmotionRepositoryFactory } from "../../../emotion/infrastructure/emotion-repository-factory";
 import { NewMessageParams } from "../../../message/domain/messageParams";
@@ -20,6 +19,7 @@ import { AuthServiceFactory } from "../../../auth/infrastructure/auth-service-fa
 import { Auth } from "../../../auth/domain/auth";
 import { CustomLoader } from "../../../../core/components/loader/loader";
 import { toast } from "react-toastify";
+import { startSocketClient } from "../../../message/infrastructure/sockets";
 
 export const ChatScreen: React.FC = () => {
   const [messageText, setMessageText] = useState("");
@@ -55,40 +55,35 @@ export const ChatScreen: React.FC = () => {
     }
   });
 
-  //extraer sockets etc en otra clase. Colocarlo en el dominio de application
-
   useEffect(() => {
       fetchConversations();
 
-      if(!process.env.REACT_APP_SOCKET_URL) {
-        throw new Error('Socket URL must be set in .env file')
+      if(!process.env.REACT_APP_API_URL) {
+        throw new Error('API URL must be set in .env file')
       }
 
-      const socket = io(process.env.REACT_APP_SOCKET_URL);
-      socket.on("askForToken", () => {
-        socket.emit("sendToken", authData.token);
-      });
-
-      socket.on('connect', () => {
-        setOnline(true)
-      })
-
-      socket.on('disconnect', (reason: string) => {
-        toast.error('You have been disconnected from server')
-        setOnline(false)
-
-        if (reason === 'io server disconnect') {
-          socket.connect();
+      const socket = startSocketClient({
+        wsURL: process.env.REACT_APP_API_URL,
+        token: authData.token,
+        onConnect: () => {
+          setOnline(true)
+        },
+        onDisconnect: (reason: string) => {
+          toast.error('You have been disconnected from chat service')
+          setOnline(false)
+  
+          if (reason === 'io server disconnect') {
+            socket.connect();
+          }
+        },
+        onNewMessage: (newMessage: NewMessageData) => {
+          if(typeof newMessage === 'string') {
+            newMessage = JSON.parse(newMessage)
+          }
+  
+          addMessageToConvo(newMessage, conversationsRef.current)
         }
       })
-
-      socket.on("newMessage", (newMessage: NewMessageData) => {
-        if(typeof newMessage === 'string') {
-          newMessage = JSON.parse(newMessage)
-        }
-
-        addMessageToConvo(newMessage, conversationsRef.current)
-      });
 
       setSocket(socket);
 

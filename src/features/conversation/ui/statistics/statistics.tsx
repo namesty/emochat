@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { SheetLayout } from '../../../../application/ui/sheetLayout/sheetLayout'
 import { ConversationRepositoryFactory } from '../../infrastructure/conversation-repository-factory'
-import { BarChart, XAxis, YAxis, Bar, CartesianGrid } from  'recharts'
+import { BarChart, XAxis, YAxis, Bar } from  'recharts'
 import { Emotion } from '../../../emotion/domain/emotion'
 import styles from './statistics.module.css'
 import { Header } from '../../../../application/ui/header/header'

@@ -31,7 +31,6 @@ export const MessageList: React.FC<Props> = ({conversation, authData, isGroup, g
   useEffect(() => {
     if(ref.current !== null) {
       ref.current.scrollIntoView({
-        behavior: 'smooth',
         block: 'end'
       })
     }

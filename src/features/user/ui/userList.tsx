@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { UserRepositoryFactory } from '../infrastructure/user-repository-factory'
 import { User } from '../domain/user'
 import { UserItem } from './user'
-import { ConversationRepositoryFactory } from '../../conversation/infrastructure/conversation-repository-factory'
-import { useHistory } from 'react-router-dom'
 
 interface Props {
   setSelectedUsersCallback: (selectedUsers: User[]) => void
@@ -12,7 +10,6 @@ interface Props {
 export const UserList: React.FC<Props> = ({ setSelectedUsersCallback }) => {
   const [users, setUsers] = useState<User[]>([])
   const [selectedUsers, setSelectedUsers] = useState<User[]>([])
-  const history = useHistory()
   
   useEffect(() => {
     fetchUsers()

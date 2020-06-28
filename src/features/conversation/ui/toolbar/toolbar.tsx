@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { faChartPie, faSignOutAlt, faPlus, faInfo, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faChartPie, faSignOutAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import styles from './toolbar.module.css'
 import { ConversationCreateModal } from '../create/conversationCreateModal';
 import { useHistory } from 'react-router-dom';

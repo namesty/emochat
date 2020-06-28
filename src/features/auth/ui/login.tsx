@@ -32,10 +32,6 @@ export const Login: React.FC = () => {
     setPassword(event.target.value)
   }
 
-  const goToSignup = () => {
-    history.push('/signup')
-  }
-
   return (
     <div className={styles.main}>
       <form onSubmit={onSubmit}>
@@ -69,7 +65,7 @@ export const Login: React.FC = () => {
             </button>
           </div>
           <div className={styles.footer}>
-            <p>Not a member yet? <a onClick={goToSignup}>Create an account</a></p>
+            <p>Not a member yet? <a href="/signup">Create an account</a></p>
           </div>
         </div>
       </form>

@@ -33,23 +33,23 @@ export const MessageInput: React.FC<Props> = ({
         }}
       />
       {loadingEmotion ? (
-        <a className={`${styles.button} ${styles.emotionsButton}`}>
+        <button className={`${styles.button} ${styles.emotionsButton}`}>
           <CustomLoader height={20} width={20} color={"#eeeeee"} />
-        </a>
+        </button>
       ) : (
-        <a
+        <button
           className={`${styles.button} ${styles.emotionsButton}`}
           onClick={onClickEmotion}
         >
           <FontAwesomeIcon color={"#eeeeee"} icon={faBrain} />
-        </a>
+        </button>
       )}
-      <a
+      <button
         className={`${styles.button} ${styles.sendButton}`}
         onClick={onClickSend}
       >
         <FontAwesomeIcon color={"#eeeeee"} icon={faPaperPlane} />
-      </a>
+      </button>
     </div>
   );
 };
