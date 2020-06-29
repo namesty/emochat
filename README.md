@@ -12,3 +12,8 @@ https://emochat.herokuapp.com/
 * ![#9090A0](https://via.placeholder.com/15/9090A0/000000?text=+) `Bored`
 * ![#EF6F18](https://via.placeholder.com/15/EF6F18/000000?text=+) `Excited`
 * ![#37649B](https://via.placeholder.com/15/37649B/000000?text=+) `Sad`
+
+## Run locally:
+
+* `npm i`
+* `npm run start:dev`
